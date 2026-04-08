@@ -17,9 +17,7 @@ import {
   GitBranchIcon
 } from 'lucide-react';
 
-// Konfigurasi API Gemini
-const apiKey = "AIzaSyArKUOS3f6J_yL5weSkJ4qS5A5B3nqV5wE";
-const GEMINI_MODEL = "gemini-flash-latest";
+// Konfigurasi API Gemini dihapus karena sekarang di-handle oleh Cloudflare Pages Function
 
 const App = () => {
   console.log("App component executing");
@@ -81,16 +79,11 @@ const App = () => {
   }, [messages]);
 
   const callGemini = async (prompt, systemInstruction, history = []) => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-    const recentHistory = history.slice(-6).map(msg => ({
-      role: msg.role === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text }]
-    }));
-
+    const url = `/api/gemini`;
     const payload = {
-      contents: [...recentHistory, { role: 'user', parts: [{ text: prompt }] }],
-      systemInstruction: { parts: [{ text: systemInstruction }] },
-      generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
+      prompt,
+      systemInstruction,
+      history
     };
 
     let delay = 1000;
