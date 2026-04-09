@@ -14,7 +14,11 @@ import {
   Zap,
   ShieldCheck,
   Languages,
-  GitBranchIcon
+  GitBranchIcon,
+  MonitorSmartphone,
+  Server,
+  Activity,
+  Briefcase
 } from 'lucide-react';
 
 // Konfigurasi API Gemini dihapus karena sekarang di-handle oleh Cloudflare Pages Function
@@ -52,7 +56,9 @@ const App = () => {
       aiTitle: "Asisten Karir AI",
       aiStatus: "Mode Ahli",
       aiPlaceholder: "Tanya apa saja tentang Humam...",
-      suggestions: ["Keahlian Teknis?", "Pengalaman di Levart?", "Implementasi mTLS?", "Kenapa pilih Humam?"]
+      suggestions: ["Keahlian Teknis?", "Pengalaman di Levart?", "Implementasi mTLS?", "Kenapa pilih Humam?"],
+      servicesTitle: "Layanan yang Tersedia",
+      servicesContact: "Diskusikan Proyek"
     },
     en: {
       hero: "I'm Humam. I build robust, scalable, and secure backend infrastructure using Laravel & Golang.",
@@ -70,7 +76,9 @@ const App = () => {
       aiTitle: "AI Career Assistant",
       aiStatus: "Expert Mode",
       aiPlaceholder: "Ask anything about Humam...",
-      suggestions: ["Tech Stack?", "Experience at Levart?", "mTLS Implementation?", "Why hire Humam?"]
+      suggestions: ["Tech Stack?", "Experience at Levart?", "mTLS Implementation?", "Why hire Humam?"],
+      servicesTitle: "Provided Services",
+      servicesContact: "Discuss Your Project"
     }
   };
 
@@ -205,6 +213,45 @@ const App = () => {
     }
   ];
 
+  const servicesList = [
+    {
+      title: { id: 'Pengembangan Web Fullstack', en: 'Fullstack Web Development' },
+      desc: {
+        id: 'Pembuatan aplikasi web end-to-end yang tangguh, responsif, scalable menggunakan React/Vue/Nextjs dan integrasi backend yang solid.',
+        en: 'End-to-end modern, responsive, and scalable web application development using React/Vue/Nextjs with solid backend integration.'
+      },
+      icon: <Layers className="w-6 h-6" />,
+      tags: ['React', 'Vue', 'Next.js', 'Tailwind']
+    },
+    {
+      title: { id: 'Pengembangan Aplikasi Mobile', en: 'Mobile App Development' },
+      desc: {
+        id: 'Pembuatan aplikasi lintas platform (iOS & Android) berkinerja stabil dan efisien menggunakan Flutter dengan antarmuka yang intuitif.',
+        en: 'High-performance cross-platform (iOS & Android) application development using Flutter with highly intuitive interfaces.'
+      },
+      icon: <MonitorSmartphone className="w-6 h-6" />,
+      tags: ['Flutter', 'iOS', 'Android', 'Dart']
+    },
+    {
+      title: { id: 'Arsitektur & API Backend', en: 'Backend Architecture & APIs' },
+      desc: {
+        id: 'Desain dan implementasi infrastruktur backend yang terstruktur, cepat, dan aman (mTLS, OAuth) menggunakan Golang dan Laravel.',
+        en: 'Design and implementation of robust, fast, and secure backend infrastructure (mTLS, OAuth) using Golang and Laravel.'
+      },
+      icon: <Server className="w-6 h-6" />,
+      tags: ['Golang', 'Laravel', 'Microservices', 'RESTful']
+    },
+    {
+      title: { id: 'Optimasi & Audit Sistem', en: 'System Optimization & Audits' },
+      desc: {
+        id: 'Audit performa sistem menyeluruh, peningkatan kecepatan query database, dan refactoring arsitektur lama (legacy) untuk skalabilitas tinggi.',
+        en: 'Thorough system performance audits, database query enhancements, and legacy architecture refactoring for high scalability.'
+      },
+      icon: <Activity className="w-6 h-6" />,
+      tags: ['Performance', 'Scaling', 'Refactoring', 'CI/CD']
+    }
+  ];
+
   const projects = [
     {
       title: { id: 'DMS Aman & E-Signature', en: 'Secure DMS & E-Signature' },
@@ -294,6 +341,39 @@ const App = () => {
             <a href="https://github.com/humamalamin" target="_blank" className={`px-8 py-4 font-bold rounded-2xl flex items-center gap-3 transition-all ${darkMode ? 'bg-white/5 border border-white/10 hover:bg-white/10' : 'bg-white border border-slate-200 hover:bg-slate-50'}`}>
               <GitBranchIcon className="w-5 h-5" /> GitHub
             </a>
+          </div>
+        </section>
+
+        {/* Services */}
+        <section className="mb-32" id="services">
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-3xl font-black tracking-tight">{t[lang].servicesTitle}</h2>
+            <div className={`flex-1 h-px ${darkMode ? 'bg-white/10' : 'bg-slate-200'}`}></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {servicesList.map((s, i) => (
+              <div key={i} className={`p-8 rounded-[2rem] border transition-all group flex flex-col sm:flex-row gap-6 items-start ${theme.card}`}>
+                <div className="w-16 h-16 shrink-0 rounded-2xl bg-indigo-600/10 flex items-center justify-center text-indigo-500 mb-2 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-inner">
+                  {s.icon}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold mb-3">{s.title[lang]}</h3>
+                  <p className={`text-sm leading-relaxed mb-6 ${theme.sub}`}>{s.desc[lang]}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {s.tags.map((tag, idx) => (
+                      <span key={idx} className={`text-xs font-bold px-3 py-1 rounded-lg ${darkMode ? 'bg-white/5 text-indigo-300' : 'bg-indigo-50 text-indigo-700'}`}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 flex justify-center">
+             <a href="https://wa.me/6282125938523" target="_blank" className="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/40 transform hover:-translate-y-1">
+                <Briefcase className="w-5 h-5" /> {t[lang].servicesContact}
+             </a>
           </div>
         </section>
 
