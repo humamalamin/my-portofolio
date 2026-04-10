@@ -1,4 +1,28 @@
-export async function onRequestPost({ request, env }) {
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function onRequest(context) {
+  const { request, env } = context;
+
+  // Handle CORS preflight requests
+  if (request.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders
+    });
+  }
+
+  // Only allow POST requests for this endpoint
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
+    });
+  }
+
   try {
     const { prompt, systemInstruction, history } = await request.json();
     const apiKey = env.GEMINI_API_KEY;
@@ -6,7 +30,7 @@ export async function onRequestPost({ request, env }) {
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "Missing Gemini API Key in Cloudflare Environment" }), {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -34,20 +58,20 @@ export async function onRequestPost({ request, env }) {
       const errText = await response.text();
       return new Response(JSON.stringify({ error: "Gemini API Error", details: errText }), {
         status: response.status,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
     const data = await response.json();
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
 
   } catch (error) {
     return new Response(JSON.stringify({ error: "Internal Server Error", message: error.message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   }
 }
