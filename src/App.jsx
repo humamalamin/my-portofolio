@@ -333,8 +333,8 @@ const App = () => {
               <Sparkles className="w-5 h-5" /> {t[lang].chatAi}
             </button>
             
-            {/* Re-added Download CV Button */}
-            <a href="#" className={`px-8 py-4 font-bold rounded-2xl flex items-center gap-3 transition-all ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
+            {/* Download CV Button */}
+            <a href="/cv.pdf" download="CV-Humam.pdf" className={`px-8 py-4 font-bold rounded-2xl flex items-center gap-3 transition-all ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>
               <FileDown className="w-5 h-5" /> {t[lang].download}
             </a>
 
